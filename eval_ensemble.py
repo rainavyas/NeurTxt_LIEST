@@ -113,6 +113,7 @@ if __name__ == "__main__":
     for model_path in model_paths:
         model = BERTGrader()
         model.load_state_dict(torch.load(model_path))
+        model.to(device)
         models.append(model)
 
     targets = None
