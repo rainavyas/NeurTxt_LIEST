@@ -87,8 +87,8 @@ if __name__ == "__main__":
 
     args = commandLineParser.parse_args()
     out_file = args.OUT
-    responses_file = args.TRAIN_DATA
-    grades_file = args.TEST_DATA
+    responses_file = args.RESPONSES
+    grades_file = args.GRADES
     batch_size = args.B
     epochs = args.epochs
     lr = args.lr
