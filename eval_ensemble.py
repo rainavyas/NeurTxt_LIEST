@@ -105,6 +105,7 @@ if __name__ == "__main__":
 
     # Load the data
     input_ids, mask, labels, speakerids = get_data(responses_file, grades_file, part=part)
+    print(len(labels))
     test_ds = TensorDataset(input_ids, mask, labels)
     test_dl = DataLoader(test_ds, batch_size=batch_size)
 
