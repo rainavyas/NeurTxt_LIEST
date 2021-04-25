@@ -10,7 +10,7 @@ from tools import AverageMeter, get_default_device, calculate_mse, calculate_pcc
 from models import BERTGrader
 import statistics
 
-def eval(val_loader, model):
+def eval(val_loader, model, device):
     targets = []
     preds = []
 
@@ -19,6 +19,10 @@ def eval(val_loader, model):
 
     with torch.no_grad():
         for i, (id, mask, target) in enumerate(val_loader):
+
+            id = id.to(device)
+            mask = mask.to(device)
+            target = target.to(device)
 
             # Forward pass
             pred = model(id, mask)
@@ -67,7 +71,7 @@ def get_ensemble_stats(all_preds, targets):
     less05 = calculate_less05(ensemble_preds, torch.FloatTensor(targets))
     less1 = calculate_less1(ensemble_preds, torch.FloatTensor(targets))
 
-    return mse.item(), pcc.item(), avg.item(), less05, less1
+    return ensemble_preds.tolist(), mse.item(), pcc.item(), avg.item(), less05, less1
 
 
 if __name__ == "__main__":
@@ -75,16 +79,18 @@ if __name__ == "__main__":
     # Get command line arguments
     commandLineParser = argparse.ArgumentParser()
     commandLineParser.add_argument('MODELS', type=str, help='trained .th models separated by space')
-    commandLineParser.add_argument('TEST_DATA', type=str, help='prepped test data file')
-    commandLineParser.add_argument('TEST_GRADES', type=str, help='test data grades')
+    commandLineParser.add_argument('RESPONSES', type=str, help='responses text file')
+    commandLineParser.add_argument('GRADES', type=str, help='scores text file')
+    commandLineParser.add_argument('OUT', type=str, help='predicted scores file')
     commandLineParser.add_argument('--B', type=int, default=16, help="Specify batch size")
     commandLineParser.add_argument('--part', type=int, default=3, help="Specify part of exam")
 
     args = commandLineParser.parse_args()
     model_paths = args.MODELS
     model_paths = model_paths.split()
-    test_data_file = args.TEST_DATA
-    test_grades_files = args.TEST_GRADES
+    responses_file = args.RESPONSES
+    out_file = args.OUT
+    grades_file = args.GRADES
     batch_size = args.B
     part=args.part
 
@@ -94,9 +100,12 @@ if __name__ == "__main__":
     with open('CMDs/eval_ensemble.cmd', 'a') as f:
         f.write(' '.join(sys.argv)+'\n')
 
-    # Load the data as tensors
-    input_ids_test, mask_test, labels_test = get_data(test_data_file, test_grades_files, part=part)
-    test_ds = TensorDataset(input_ids_test, mask_test, labels_test)
+    # Get the device
+    device = get_default_device()
+
+    # Load the data
+    input_ids, mask, labels, speakerids = get_data(responses_file, grades_file, part=part)
+    test_ds = TensorDataset(input_ids, mask, labels)
     test_dl = DataLoader(test_ds, batch_size=batch_size)
 
     # Load the models
@@ -110,7 +119,7 @@ if __name__ == "__main__":
     all_preds = []
 
     for model in models:
-        preds, targets = eval(test_dl, model)
+        preds, targets = eval(test_dl, model, device)
         all_preds.append(preds)
 
     # Get single stats
@@ -125,7 +134,7 @@ if __name__ == "__main__":
     print("LESS1: "+str(less1_mean)+" +- "+str(less1_std))
 
     # Get ensemble stats
-    mse, pcc, avg, less05, less1 = get_ensemble_stats(all_preds, targets)
+    ensemble_preds, mse, pcc, avg, less05, less1 = get_ensemble_stats(all_preds, targets)
     print()
     print("ENSEMBLE STATS\n")
     print("MSE: ", mse)
@@ -133,3 +142,12 @@ if __name__ == "__main__":
     print("AVG: ", avg)
     print("LESS05: ", less05)
     print("LESS1: ", less1)
+
+    # Save the predicted scores
+    with open(out_file, 'w') as f:
+        text = 'SPEAKERID REF PRED'
+        f.write(text)
+    for spk, ref, pred in zip(speakerids, targets, ensemble_preds):
+        with open(out_file, 'a') as f:
+            text = '\n'+spk + ' ' + ref + ' ' + pred
+            f.write()
