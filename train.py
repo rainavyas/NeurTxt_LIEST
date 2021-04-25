@@ -110,7 +110,7 @@ if __name__ == "__main__":
     device = get_default_device()
 
     # Load the data
-    input_ids, mask, labels, _ = get_data(responses_file, grades_files, part=part)
+    input_ids, mask, labels, _ = get_data(responses_file, grades_file, part=part)
 
     # split into training and validation sets
     input_ids_val = input_ids[:val_size]
