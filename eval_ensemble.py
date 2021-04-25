@@ -26,6 +26,8 @@ def eval(val_loader, model, device):
 
             # Forward pass
             pred = model(id, mask)
+            if len(pred) == 1:
+                pred = pred.unzqueeze(dim=0)
 
             # Store
             preds += pred.tolist()
