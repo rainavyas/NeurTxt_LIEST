@@ -151,4 +151,4 @@ if __name__ == "__main__":
     for spk, ref, pred in zip(speakerids, targets, ensemble_preds):
         with open(out_file, 'a') as f:
             text = '\n'+spk + ' ' + str(ref) + ' ' + str(pred)
-            f.write()
+            f.write(text)
