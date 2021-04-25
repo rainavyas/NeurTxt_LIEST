@@ -34,7 +34,7 @@ class BERTGrader(nn.Module):
         '''
         output = self.encoder(input_ids, attention_mask)
         word_embeddings = output.last_hidden_state
-        
+
         head1 = self._apply_attn(word_embeddings, attention_mask, self.attn1)
         head2 = self._apply_attn(word_embeddings, attention_mask, self.attn2)
         head3 = self._apply_attn(word_embeddings, attention_mask, self.attn3)
@@ -44,7 +44,7 @@ class BERTGrader(nn.Module):
 
         h1 = self.layer1(all_heads).clamp(min=0)
         h2 = self.layer2(h1).clamp(min=0)
-        y = self.layer3(h2).squeeze()
+        y = self.layer3(h2).squeeze(dim=-1)
         return y
 
     def _apply_attn(self, embeddings, mask, weights_transformation):
