@@ -7,7 +7,7 @@ from data_prep import get_data
 import sys
 import os
 import argparse
-from tools import AverageMeter, get_default_device, calculate_mse, calculate_pcc, calculate_less1, calculate_less05
+from tools import AverageMeter, get_default_device
 from models import BERTGrader
 
 def train(train_loader, model, criterion, optimizer, epoch, device, print_freq=25):
@@ -74,29 +74,29 @@ if __name__ == "__main__":
     # Get command line arguments
     commandLineParser = argparse.ArgumentParser()
     commandLineParser.add_argument('OUT', type=str, help='Specify output th file')
-    commandLineParser.add_argument('TRAIN_DATA', type=str, help='prepped training data file')
-    commandLineParser.add_argument('TEST_DATA', type=str, help='prepped test data file')
-    commandLineParser.add_argument('TRAIN_GRADES', type=str, help='training data grades')
-    commandLineParser.add_argument('TEST_GRADES', type=str, help='test data grades')
+    commandLineParser.add_argument('RESPONSES', type=str, help='responses text file')
+    commandLineParser.add_argument('GRADES', type=str, help='scores text file')
     commandLineParser.add_argument('--B', type=int, default=16, help="Specify batch size")
     commandLineParser.add_argument('--epochs', type=int, default=3, help="Specify epochs")
     commandLineParser.add_argument('--lr', type=float, default=0.00001, help="Specify learning rate")
     commandLineParser.add_argument('--sch', type=int, default=10, help="Specify scheduler param")
     commandLineParser.add_argument('--seed', type=int, default=1, help="Specify seed")
     commandLineParser.add_argument('--part', type=int, default=3, help="Specify part of exam")
+    commandLineParser.add_argument('--val_size', type=int, default=500, help="Specify validation set size")
+
 
     args = commandLineParser.parse_args()
     out_file = args.OUT
-    train_data_file = args.TRAIN_DATA
-    test_data_file = args.TEST_DATA
-    train_grades_files = args.TRAIN_GRADES
-    test_grades_files = args.TEST_GRADES
+    responses_file = args.TRAIN_DATA
+    grades_file = args.TEST_DATA
     batch_size = args.B
     epochs = args.epochs
     lr = args.lr
     sch = args.sch
     seed = args.seed
     part = args.part
+    val_size = args.val_size
+
 
     torch.manual_seed(seed)
 
@@ -109,16 +109,24 @@ if __name__ == "__main__":
     # Get the device
     device = get_default_device()
 
-    # Load the data as tensors
-    input_ids_train, mask_train, labels_train = get_data(train_data_file, train_grades_files, part=part)
-    input_ids_test, mask_test, labels_test = get_data(test_data_file, test_grades_files, part=part)
+    # Load the data
+    input_ids, mask, labels, _ = get_data(responses_file, grades_files, part=part)
+
+    # split into training and validation sets
+    input_ids_val = input_ids[:val_size]
+    mask_val = mask[:val_size]
+    labels_val = labels[:val_size]
+
+    input_ids_train = input_ids[val_size:]
+    mask_train = mask[val_size:]
+    labels_train = labels[val_size:]
 
     # Use dataloader to handle batches
     train_ds = TensorDataset(input_ids_train, mask_train, labels_train)
-    test_ds = TensorDataset(input_ids_test, mask_test, labels_test)
+    val_ds = TensorDataset(input_ids_val, mask_val, labels_val)
 
     train_dl = DataLoader(train_ds, batch_size=batch_size, shuffle=True)
-    test_dl = DataLoader(test_ds, batch_size=batch_size)
+    val_dl = DataLoader(val_ds, batch_size=batch_size)
 
     # initialise grader
     model = BERTGrader()
@@ -142,7 +150,7 @@ if __name__ == "__main__":
         scheduler.step()
 
         # evaluate as we go along
-        eval(test_dl, model, criterion, device)
+        eval(val_dl, model, criterion, device)
 
     # Save the trained model
     state = model.state_dict()
