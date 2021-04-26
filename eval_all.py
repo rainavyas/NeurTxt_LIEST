@@ -42,7 +42,7 @@ if __name__ == "__main__":
             ref_dict[speakerid] = ref
 
         pred_dicts.append(pred_dict)
-        ref_dicts.append(ref_dicts)
+        ref_dicts.append(ref_dict)
 
     # Form id, ref, pred lists
     speakerids = []
