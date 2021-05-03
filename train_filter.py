@@ -56,6 +56,7 @@ if __name__ == "__main__":
 
     # Load the data
     input_ids, mask, labels, _ = get_data(responses_file, grades_file, part=part)
+    print(len(labels))
 
     # filter data to only keep grades equal to or above the filter value
     filtered = labels >= filter
@@ -64,6 +65,7 @@ if __name__ == "__main__":
     input_ids = input_ids[inds]
     mask = mask[inds]
     labels = labels[inds]
+    print(len(labels))
 
     # split into training and validation sets
     input_ids_val = input_ids[:val_size]
