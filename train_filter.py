@@ -60,7 +60,7 @@ if __name__ == "__main__":
 
     # filter data to only keep grades equal to or above the filter value
     filtered = labels >= filter
-    inds = filtered.nonzero()
+    inds = filtered.nonzero().squeeze()
 
     input_ids = input_ids[inds]
     mask = mask[inds]
