@@ -49,6 +49,7 @@ if __name__ == "__main__":
 
     preds = np.array(preds)
     refs = np.array(refs)
+    print(len(preds))
 
     m, b = best_fit_slope_and_intercept(preds,refs)
     print("gradient:", m)
