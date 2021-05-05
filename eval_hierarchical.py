@@ -71,6 +71,12 @@ if __name__ == "__main__":
     fileB = args.FILEB
     out = args.OUT
 
+    # Save the command run
+    if not os.path.isdir('CMDs'):
+        os.mkdir('CMDs')
+    with open('CMDs/eval_hierarchical.cmd', 'a') as f:
+        f.write(' '.join(sys.argv)+'\n')
+
     # Store all data in dictionaries
     preds_stageB, _ = get_data(fileB)
     preds_stageA, refs_dict = get_data(fileA)
