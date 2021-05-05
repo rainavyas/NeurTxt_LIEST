@@ -13,6 +13,7 @@ import argparse
 import torch
 import torch.nn as nn
 from tools import calculate_mse
+import numpy as np
 
 def apply_hierarchal(preds_stage1, preds_stage2, thresh=4.0):
     preds = []
