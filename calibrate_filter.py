@@ -39,10 +39,10 @@ if __name__ == "__main__":
     refs = []
 
     for line in lines:
+        items = line.split()
         # skip if reference grade too low
         if float(items[1]) < filter:
             continue
-        items = line.split()
         ids.append(items[0])
         refs.append(float(items[1]))
         preds.append(float(items[2]))
