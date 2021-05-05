@@ -94,10 +94,10 @@ if __name__ == "__main__":
     baseline = baseline ** 0.5
 
     for k in np.linspace(0, 6, 60):
-        preds = apply_hierarchal(predsA, predsB, thresh=k)
+        preds = apply_hierarchal(torch.FloatTensor(predsA), torch.FloatTensor(predsB), thresh=k)
         mse_hier = calculate_mse(torch.FloatTensor(preds), torch.FloatTensor(refs)).item()
         rmse_hier = mse_hier**0.5
-        preds_ref = apply_hierarchal_ref(predsA, predsB, torch.FloatTensor(refs), thresh=k)
+        preds_ref = apply_hierarchal_ref(torch.FloatTensor(predsA), torch.FloatTensor(predsB), torch.FloatTensor(refs), thresh=k)
         mse_ref = calculate_mse(torch.FloatTensor(preds_ref), torch.FloatTensor(refs)).item()
         rmse_ref = mse_ref**0.5
         ks.append(k)
