@@ -79,6 +79,7 @@ if __name__ == "__main__":
         print("Grade", grade)
         print("Number of speakers:", num_spk)
         if num_spk == 0:
+            print()
             continue
         mse, pcc, avg, less05, less1 = handler.all_stats()
 
