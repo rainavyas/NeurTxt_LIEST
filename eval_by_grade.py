@@ -68,7 +68,7 @@ if __name__ == "__main__":
 
     grade_boundaries = {"A1":0.5, "A2":1.5, "B1":2.5, "B2":3.5, "C1":4.5, "C2":5.5}
 
-    for grade, val in grade_boundaries:
+    for grade, val in grade_boundaries.items():
         handler = DataHandler()
         for line in lines:
             items = line.split()
