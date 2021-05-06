@@ -97,8 +97,10 @@ if __name__ == "__main__":
         ref = float(items[1])
         handler.add_data(items[0], float(items[2]), ref)
     mse, pcc, avg, less05, less1 = handler.all_stats()
+    num_spk = len(handler.ids)
 
     print("Overall Statistics")
+    print("Number of speakers:", num_spk)
     print("MSE:", mse)
     print("PCC:", pcc)
     print("AVG:", avg)
