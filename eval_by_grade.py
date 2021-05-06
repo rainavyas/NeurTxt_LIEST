@@ -14,7 +14,7 @@ import torch
 import sys
 import os
 import argparse
-from tools import calculate_mse, calculate_pcc, calculate_less1, calculate_less05, calculate_avg
+from tools import calculate_rmse, calculate_pcc, calculate_less1, calculate_less05, calculate_avg
 
 class DataHandler():
     '''
@@ -36,13 +36,13 @@ class DataHandler():
         self.refs.append(ref)
 
     def all_stats(self):
-        mse = calculate_mse(torch.FloatTensor(self.preds), torch.FloatTensor(self.refs)).item()
+        rmse = calculate_rmse(torch.FloatTensor(self.preds), torch.FloatTensor(self.refs)).item()
         pcc = calculate_pcc(torch.FloatTensor(self.preds), torch.FloatTensor(self.refs)).item()
         avg = calculate_avg(torch.FloatTensor(self.preds)).item()
         less05 = calculate_less05(torch.FloatTensor(self.preds), torch.FloatTensor(self.refs))
         less1 = calculate_less1(torch.FloatTensor(self.preds), torch.FloatTensor(self.refs))
 
-        return mse, pcc, avg, less05, less1
+        return rmse, pcc, avg, less05, less1
 
 
 if __name__ == "__main__":
@@ -81,9 +81,9 @@ if __name__ == "__main__":
         if num_spk == 0:
             print()
             continue
-        mse, pcc, avg, less05, less1 = handler.all_stats()
+        rmse, pcc, avg, less05, less1 = handler.all_stats()
 
-        print("MSE:", mse)
+        print("RMSE:", rmse)
         print("PCC:", pcc)
         print("AVG:", avg)
         print("Less 0.5:", less05)
@@ -96,12 +96,12 @@ if __name__ == "__main__":
         items = line.split()
         ref = float(items[1])
         handler.add_data(items[0], float(items[2]), ref)
-    mse, pcc, avg, less05, less1 = handler.all_stats()
+    rmse, pcc, avg, less05, less1 = handler.all_stats()
     num_spk = len(handler.ids)
 
     print("Overall Statistics")
     print("Number of speakers:", num_spk)
-    print("MSE:", mse)
+    print("RMSE:", rmse)
     print("PCC:", pcc)
     print("AVG:", avg)
     print("Less 0.5:", less05)

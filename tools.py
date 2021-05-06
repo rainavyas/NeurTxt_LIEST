@@ -15,6 +15,9 @@ def calculate_mse(x1, x2):
     squared_error = (x2-x1)**2
     return torch.mean(squared_error)
 
+def calculate_rmse(x1, x2):
+    return calculate_mse(x1, x2)**0.5
+
 
 def calculate_pcc(y_pred_useful, y):
     size = y.size(0)
