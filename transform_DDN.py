@@ -65,7 +65,11 @@ if __name__ == "__main__":
             except:
                 continue
         pred = total/count
-        ref = ref_dict[id]
+
+        try:
+            ref = ref_dict[id]
+        except:
+            print("ID not found", id)
 
         ids.append(id)
         refs.append(ref)
