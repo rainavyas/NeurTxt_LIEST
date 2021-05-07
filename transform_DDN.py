@@ -39,7 +39,7 @@ if __name__ == "__main__":
 
     for line in lines:
         items = line.split()
-        ref_dict[items[0]] = float(items(1))
+        ref_dict[items[0]] = float(items[1])
 
     # Create ids, refs and preds aligned lists
     with open(ddn_pred_file, 'r') as f:
