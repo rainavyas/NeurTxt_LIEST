@@ -88,8 +88,8 @@ if __name__ == "__main__":
 
     for id in refs_dict:
         try:
-            predsA.append(preds_stageA[id])
             predsB.append(preds_stageB[id])
+            predsA.append(preds_stageA[id])
             refs.append(refs_dict[id])
         except:
             print("ID mismatch ", id)
