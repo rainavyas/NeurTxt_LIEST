@@ -2,12 +2,12 @@
 Calculates statistics (e.g. MSE, PCC) using a id, ref, pred .txt
 file (e.g. output by eval_all_calibrate.py).
 Calculates statistics by grade, i.e. A1, A2, B1, B2, C1, C2
-A1: 0.5-1.5
-A2: 1.5-2.5
-B1: 2.5-3.5
-B2: 3.5-4.5
-C1: 4.5-5.5
-C2: 5.5-6.0
+Pre A1: 0 <= y < 1
+A1: 1 <= y < 2
+A2: 2 <= y < 3
+B1: 3 <= y < 4
+B2: 4 <= y < 5
+C1-C2: 5 <= y < 6
 '''
 
 import torch
@@ -66,7 +66,7 @@ if __name__ == "__main__":
     lines = [line.rstrip('\n') for line in lines]
     lines = lines[1:] # exclude header
 
-    grade_boundaries = {"A1":0.5, "A2":1.5, "B1":2.5, "B2":3.5, "C1":4.5, "C2":5.5}
+    grade_boundaries = {"Pre A1":0.0, "A1":1.0, "A2":2.0, "B1":3.0, "B2":4.0, "C1-C2":5.0}
 
     for grade, val in grade_boundaries.items():
         handler = DataHandler()
