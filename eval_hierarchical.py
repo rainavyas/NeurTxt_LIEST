@@ -87,9 +87,12 @@ if __name__ == "__main__":
     refs = []
 
     for id in refs_dict:
-        predsA.append(preds_stageA[id])
-        predsB.append(preds_stageB[id])
-        refs.append(refs_dict[id])
+        try:
+            predsA.append(preds_stageA[id])
+            predsB.append(preds_stageB[id])
+            refs.append(refs_dict[id])
+        except:
+            print("ID mismatch ", id)
 
     # Make hierarchical plot
 
