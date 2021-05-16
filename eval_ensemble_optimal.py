@@ -45,8 +45,8 @@ if __name__ == "__main__":
 
     for id in refs_dict:
         try:
-            predsB.append(preds_stageB[id])
-            predsA.append(preds_stageA[id])
+            predsB.append(preds_modelB[id])
+            predsA.append(preds_modelA[id])
             refs.append(refs_dict[id])
             ids.append(id)
         except:
