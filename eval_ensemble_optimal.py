@@ -80,6 +80,7 @@ if __name__ == "__main__":
 
     # Save the optimal predicted scores
     alpha = best_alpha
+    print(alpha)
     preds = [(alpha*predA + (1-alpha)*predB) for predA, predB in zip(predsA, predsB)]
     with open(out_file, 'w') as f:
         text = 'SPEAKERID REF PRED'
