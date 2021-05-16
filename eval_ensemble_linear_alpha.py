@@ -62,26 +62,24 @@ if __name__ == "__main__":
     best_c = 0.0 # shift of mapper
     best_rmse = 100
 
-    ms = []
-    cs = []
-    rmses = []
+    ms = np.linspace(-1,1,100)
+    cs = np.linspace(-2,2,200)
+    rmses = np.zeros((len(ms), len(cs)))
 
-    for m in np.linspace(-1,1,100):
-        for c in np.linspace(-2,2,200):
+    for i,m in enumerate(ms):
+        for j,c in enumerate(cs):
             new_preds = [((m*ref+c)*predA + (1-(m*ref+c))*predB) for predA, predB, ref in zip(predsA, predsB, refs)]
             rmse = calculate_rmse(torch.FloatTensor(new_preds), torch.FloatTensor(refs)).item()
             if rmse < best_rmse:
                 best_m = m
                 best_c = c
                 best_rmse = rmse
-            ms.append(m)
-            cs.append(c)
-            rmses.append(rmse)
+            rmses[i,j] = rmse
 
     # Plot the results
     filename = 'ensemble_linear_alpha.png'
     fig, ax = plt.subplots(subplot_kw={"projection": "3d"})
-    surf = ax.plot_surface(np.array(ms),np.array(cs),np.array(rmses), cmap=cm.coolwarm, linewidth=0, antialiased=False)
+    surf = ax.plot_surface(ms,cs,rmses, cmap=cm.coolwarm, linewidth=0, antialiased=False)
     ax.xlabel("m")
     ax.ylabel("c")
     ax.zlabel("RMSE")
