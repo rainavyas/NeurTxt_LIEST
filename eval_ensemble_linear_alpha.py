@@ -81,8 +81,8 @@ if __name__ == "__main__":
     ms, cs = np.meshgrid(ms, cs)
     fig, ax = plt.subplots(subplot_kw={"projection": "3d"})
     surf = ax.plot_surface(ms,cs,rmses, cmap=cm.coolwarm, linewidth=0, antialiased=False)
-    ax.set_zlim(0, 0.44)
-    fig.colorbar(surf, shrink=0.5, aspect=5)
+    ax.set_zlim(0.395, 0.44)
+    fig.colorbar(surf)
     plt.savefig(filename)
     plt.clf()
 
