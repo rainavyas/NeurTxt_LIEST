@@ -61,7 +61,7 @@ if __name__ == "__main__":
     best_rmse = 100
 
     for m in np.linspace(-1,1,100):
-        for c in np.linspace(-1,1,100):
+        for c in np.linspace(-2,2,200):
             new_preds = [((m*ref+c)*predA + (1-(m*ref+c))*predB) for predA, predB, ref in zip(predsA, predsB, refs)]
             rmse = calculate_rmse(torch.FloatTensor(new_preds), torch.FloatTensor(refs)).item()
             if rmse < best_rmse:
