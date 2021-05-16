@@ -63,7 +63,7 @@ if __name__ == "__main__":
     best_rmse = 100
 
     ms = np.linspace(-1,1,100)
-    cs = np.linspace(-2,2,200)
+    cs = np.linspace(-1,1,100)
     rmses = np.zeros((len(ms), len(cs)))
 
     for i,m in enumerate(ms):
