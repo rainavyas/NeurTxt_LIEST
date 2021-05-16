@@ -81,7 +81,7 @@ if __name__ == "__main__":
     # Plot the results
     filename = 'ensemble_linear_alpha.png'
     fig, ax = plt.subplots(subplot_kw={"projection": "3d"})
-    surf = ax.plot_surface(ms,cs,rmses, cmap=cm.coolwarm, linewidth=0, antialiased=False)
+    surf = ax.plot_surface(np.array(ms),np.array(cs),np.array(rmses), cmap=cm.coolwarm, linewidth=0, antialiased=False)
     ax.xlabel("m")
     ax.ylabel("c")
     ax.zlabel("RMSE")
