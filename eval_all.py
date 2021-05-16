@@ -1,3 +1,7 @@
+'''
+Averages predictions from input prediction files
+'''
+
 import torch
 import sys
 import os
