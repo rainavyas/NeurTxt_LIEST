@@ -80,9 +80,6 @@ if __name__ == "__main__":
     filename = 'ensemble_linear_alpha.png'
     fig, ax = plt.subplots(subplot_kw={"projection": "3d"})
     surf = ax.plot_surface(ms,cs,rmses, cmap=cm.coolwarm, linewidth=0, antialiased=False)
-    ax.xlabel("m")
-    ax.ylabel("c")
-    ax.zlabel("RMSE")
     fig.colorbar(surf, shrink=0.5, aspect=5)
     plt.savefig(filename)
     plt.clf()
