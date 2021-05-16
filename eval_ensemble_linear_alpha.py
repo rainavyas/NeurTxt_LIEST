@@ -16,6 +16,8 @@ import torch
 from eval_hierarchical import get_data
 from tools import calculate_rmse
 import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 
 if __name__ == "__main__":
 
@@ -60,6 +62,10 @@ if __name__ == "__main__":
     best_c = 0.0 # shift of mapper
     best_rmse = 100
 
+    ms = []
+    cs = []
+    rmses = []
+
     for m in np.linspace(-1,1,100):
         for c in np.linspace(-2,2,200):
             new_preds = [((m*ref+c)*predA + (1-(m*ref+c))*predB) for predA, predB, ref in zip(predsA, predsB, refs)]
@@ -68,6 +74,18 @@ if __name__ == "__main__":
                 best_m = m
                 best_c = c
                 best_rmse = rmse
+            ms.append(m)
+            cs.append(c)
+            rmses.append(rmse)
+
+    # Plot the results
+    filename = 'ensemble_linear_alpha.png'
+    Axes3D.plot_surface(ms,cs,rmses)
+    plt.xlabel("m")
+    plt.ylabel("c")
+    plt.zlabel("RMSE")
+    plt.savefig(filename)
+    plt.clf()
 
     # Save the optimal predicted scores
     m = best_m
