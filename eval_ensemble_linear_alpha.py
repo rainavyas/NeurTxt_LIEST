@@ -17,7 +17,6 @@ from eval_hierarchical import get_data
 from tools import calculate_rmse
 import numpy as np
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
 
 if __name__ == "__main__":
 
@@ -80,10 +79,11 @@ if __name__ == "__main__":
 
     # Plot the results
     filename = 'ensemble_linear_alpha.png'
-    Axes3D.plot_surface(ms,cs,rmses)
+    surf = plt.plot_surface(ms,cs,rmses, cmap=cm.coolwarm, linewidth=0, antialiased=False)
     plt.xlabel("m")
     plt.ylabel("c")
     plt.zlabel("RMSE")
+    plt.colorbar(surf, shrink=0.5, aspect=5)
     plt.savefig(filename)
     plt.clf()
 
