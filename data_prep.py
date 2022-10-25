@@ -15,11 +15,11 @@ def get_spk_to_utt(responses_file, part):
     # Concatenate utterances for a speaker
     spk_to_utt = {}
     for line in lines:
-        speaker_part = int(line[14])
+        speaker_part = int(line[23])
         if speaker_part != part:
             continue
         speakerid = line[:12]
-        utt = line[20:]
+        utt = line[32:]
 
         if speakerid not in spk_to_utt:
             spk_to_utt[speakerid] = utt
@@ -36,7 +36,7 @@ def get_spk_to_grade(grades_file, part):
 
     grade_dict = {}
     for line in lines:
-        speaker_part = int(line[14])
+        speaker_part = int(line[23])
         if speaker_part != part:
             continue
         speakerid = line[:12]
