@@ -5,6 +5,8 @@ import torch
 import torch.nn as nn
 from transformers import BertTokenizer
 
+LtoNum = {'A':1, 'B':2, 'C':3, 'D':4, 'E':5}
+
 def get_spk_to_utt(responses_file, part):
 
     # Load the responses
@@ -15,7 +17,7 @@ def get_spk_to_utt(responses_file, part):
     # Concatenate utterances for a speaker
     spk_to_utt = {}
     for line in lines:
-        speaker_part = int(line[23])
+        speaker_part = LtoNum[line[23]]
         if speaker_part != part:
             continue
         speakerid = line[:12]
@@ -36,7 +38,7 @@ def get_spk_to_grade(grades_file, part):
 
     grade_dict = {}
     for line in lines:
-        speaker_part = int(line[23])
+        speaker_part = LtoNum[line[23]]
         if speaker_part != part:
             continue
         speakerid = line[:12]
